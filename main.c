@@ -1,3 +1,7 @@
+/* Larx Operating System
+ * last modified 2024-06-10
+ * (c) Pietro Renamo 2000-2024
+ */
 #include "larx.h"
 #define ST 1023
 extern char scancode;
