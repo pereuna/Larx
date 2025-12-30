@@ -91,6 +91,35 @@ void task2(void)
 	__asm__("incl 0xb8000+640+160");
 }
 
+// Keyboard handler written by ChatGPT
+void kbd(void) {
+    static unsigned short *x = (unsigned short *)(0xb8000 + 640 + 160 + 160);
+
+    unsigned char sc = (unsigned char)scancode;
+
+    /* US keyboard set 1, ilman shiftiä (minimi) */
+    static const unsigned char us_noshift[128] = {
+        0,  27, '1','2','3','4','5','6','7','8','9','0','+', 0, '\b',
+        '\t','q','w','e','r','t','y','u','i','o','p','[',']','\n', 0,
+        'a','s','d','f','g','h','j','k','l','o','a','\'', 0, '\\',
+        'z','x','c','v','b','n','m',',','.','-', 0,  '*', 0,  ' ',
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
+    if (sc < 128) {
+        unsigned char ch = us_noshift[sc];
+        if (ch) {
+            *x = 0x0700 | ch;     /* attribute 0x07, ASCII char */
+            x++;
+        }
+    }
+}
+
+// My old keyboard handler
+/*	
 void kbd(void){
 #define START 0xb8000+640+160+160 
     static unsigned short *x = (unsigned short *)START;
@@ -101,4 +130,4 @@ void kbd(void){
 	x++;
     else x = (unsigned short *)START;
 }
-
+*/

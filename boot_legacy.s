@@ -168,7 +168,7 @@ gdt:    .quad 0x0000000000000000        /* NULL descriptor */
 		
 
 gdtptr:
-	.word   6*8-1         /* gdt limit: 6 GDT entries */
+	.word   3*8-1         /* gdt limit: 6 GDT entries */
 	.long	0x7c00+gdt    /* gdt base = where is gdt at the moment */
 
 msg:

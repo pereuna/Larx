@@ -130,16 +130,19 @@ div_by_zero:
 .align
 scancode: .byte 0x0
 kbd_int:
-        pushal
-	movl	$96, %edx
-	inb     %dx,%al
-	movb	%al, scancode
-	movl	$32, %eax
-	movl	$32, %edx
-	outb    %al,%dx
-	call    kbd
-	popal
-	iret
+   pushal
+
+   movw	 $0x60, %dx
+   inb    %dx,   %al
+   movb	 %al,   scancode
+   testb  $0x80, %al        # bit7=1 => key release (break)
+   jnz    .eoi_and_out      # älä tulosta release-koodeja
+   call    kbd
+.eoi_and_out:
+   movb    $0x20, %al
+   outb    %al, $0x20        # EOI master PIC
+   popal
+   iret
 .align
 jiffies: .long 0x0742
 last_stack: .long 0x0
